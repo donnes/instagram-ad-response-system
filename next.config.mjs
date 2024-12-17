@@ -5,6 +5,9 @@ const nextConfig = {
       {
         hostname: 'avatar.vercel.sh',
       },
+      {
+        hostname: 'dailygem.com',
+      },
     ],
   },
 };
