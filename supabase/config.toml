@@ -10,6 +10,10 @@ max_rows = 1000000
 [db]
 port = 54322
 
+[db.seed]
+enabled = true
+sql_paths = ['./seed.sql']
+
 [realtime]
 enabled = true
 
