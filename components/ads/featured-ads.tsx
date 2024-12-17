@@ -38,7 +38,7 @@ export function FeaturedAds({ ads }: FeaturedAdsProps) {
                 <AdPresentation ad={ad} showFeedActions />
                 <div className="mt-4 flex justify-center">
                   <Link
-                    href={`/chat/${ad.user_id}`}
+                    href={`/direct/${ad.user_id}`}
                     className={cn(
                       'flex items-center gap-2 rounded-full px-6 py-2.5',
                       'bg-primary text-primary-foreground',
