@@ -1,16 +1,22 @@
 import type { Database } from '@/supabase/types/db';
-import { Heart } from 'lucide-react';
+import { Bookmark, Heart } from 'lucide-react';
 import Image from 'next/image';
 
-type Ad = Database['public']['Tables']['ads']['Row'];
-type User = Database['public']['Tables']['users']['Row'];
+type Ad = Database['public']['Tables']['ads']['Row'] & {
+  user: Database['public']['Tables']['users']['Row'];
+};
 
 interface AdPresentationProps {
   ad: Ad;
-  user: User;
+  showFeedActions?: boolean;
 }
 
-export function AdPresentation({ ad, user }: AdPresentationProps) {
+export function AdPresentation({
+  ad,
+  showFeedActions = false,
+}: AdPresentationProps) {
+  const user = ad.user;
+
   return (
     <div className="overflow-hidden rounded-xl bg-card">
       <div className="flex items-center gap-3 p-3">
@@ -44,18 +50,27 @@ export function AdPresentation({ ad, user }: AdPresentationProps) {
       </div>
 
       <div className="space-y-2 p-3">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
+        {showFeedActions && (
+          <div className="flex items-center justify-between">
             <button
               type="button"
               className="text-foreground hover:text-muted-foreground"
             >
-              <Heart className="h-6 w-6" />
+              <Heart className="size-6" />
             </button>
-            <span className="text-sm text-foreground">{ad.product_name}</span>
+
+            <button
+              type="button"
+              className="text-foreground hover:text-muted-foreground"
+            >
+              <Bookmark className="size-6" />
+            </button>
           </div>
-        </div>
+        )}
+
+        <h2 className="text-md text-card-foreground">{ad.product_name}</h2>
         <p className="text-sm text-card-foreground">{ad.description}</p>
+
         {ad.discount_amount && ad.original_price && (
           <div className="flex items-baseline gap-2">
             <span className="text-lg font-semibold text-foreground">
@@ -69,9 +84,7 @@ export function AdPresentation({ ad, user }: AdPresentationProps) {
       </div>
 
       <div className="border-t border-border p-3">
-        <p className="text-sm text-primary">
-          {ad.call_to_action || 'Reply to learn more'}
-        </p>
+        <p className="text-sm text-primary">{ad.deal_text}</p>
       </div>
     </div>
   );
