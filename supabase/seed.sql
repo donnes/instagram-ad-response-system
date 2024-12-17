@@ -1,3 +1,18 @@
+-- Seed users data
+insert into users (
+  id,
+  username,
+  full_name,
+  avatar_url,
+  instagram_handle
+) values (
+  'e12e6f9d-8f8e-4f9c-b9e2-8f8e4f9cb9e2',
+  'donnes',
+  'Donald Silveira',
+  'https://avatar.vercel.sh/donnes.svg?text=DS',
+  '@donnes'
+);
+
 -- Seed brands data
 insert into brands (id, slug, name, website_url) values
 (
