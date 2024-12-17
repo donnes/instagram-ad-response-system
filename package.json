@@ -10,7 +10,8 @@
     "lint:fix": "biome lint --write --unsafe",
     "format": "biome format --write",
     "typecheck": "tsc --noEmit",
-    "db:generate": "supabase gen types --lang=typescript --project-id $PROJECT_ID --schema public > ./supabase/types/db.ts"
+    "db:generate": "supabase gen types --lang=typescript --project-id $PROJECT_ID --schema public > ./supabase/types/db.ts",
+    "db:migrate": "supabase db push"
   },
   "dependencies": {
     "@ai-sdk/anthropic": "^1.0.5",
