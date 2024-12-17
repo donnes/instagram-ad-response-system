@@ -1,0 +1,26 @@
+project_id = "ebbihlnrttvyinhexrap"
+
+[api]
+enabled = true
+port = 54321
+schemas = ["public", "storage"]
+extra_search_path = ["public", "extensions"]
+max_rows = 1000000
+
+[db]
+port = 54322
+
+[realtime]
+enabled = true
+
+[studio]
+port = 54323
+
+[auth.email]
+enable_signup = false
+
+[analytics]
+enabled = true
+port = 54327
+vector_port = 54328
+backend = "postgres"
