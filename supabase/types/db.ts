@@ -80,37 +80,102 @@ export type Database = {
           },
         ]
       }
+      conversation_participants: {
+        Row: {
+          conversation_id: string
+          last_read_at: string | null
+          user_id: string
+        }
+        Insert: {
+          conversation_id: string
+          last_read_at?: string | null
+          user_id: string
+        }
+        Update: {
+          conversation_id?: string
+          last_read_at?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "conversation_participants_conversation_id_fkey"
+            columns: ["conversation_id"]
+            isOneToOne: false
+            referencedRelation: "conversations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "conversation_participants_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      conversations: {
+        Row: {
+          ad_id: string | null
+          created_at: string | null
+          id: string
+          last_message_at: string | null
+        }
+        Insert: {
+          ad_id?: string | null
+          created_at?: string | null
+          id?: string
+          last_message_at?: string | null
+        }
+        Update: {
+          ad_id?: string | null
+          created_at?: string | null
+          id?: string
+          last_message_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "conversations_ad_id_fkey"
+            columns: ["ad_id"]
+            isOneToOne: false
+            referencedRelation: "ads"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       messages: {
         Row: {
           content: string
+          conversation_id: string | null
           created_at: string
           id: string
-          receiver_id: string
           sender_id: string
+          type: Database["public"]["Enums"]["message_type"]
           updated_at: string
         }
         Insert: {
           content: string
+          conversation_id?: string | null
           created_at?: string
           id?: string
-          receiver_id: string
           sender_id: string
+          type?: Database["public"]["Enums"]["message_type"]
           updated_at?: string
         }
         Update: {
           content?: string
+          conversation_id?: string | null
           created_at?: string
           id?: string
-          receiver_id?: string
           sender_id?: string
+          type?: Database["public"]["Enums"]["message_type"]
           updated_at?: string
         }
         Relationships: [
           {
-            foreignKeyName: "messages_receiver_id_fkey"
-            columns: ["receiver_id"]
+            foreignKeyName: "messages_conversation_id_fkey"
+            columns: ["conversation_id"]
             isOneToOne: false
-            referencedRelation: "users"
+            referencedRelation: "conversations"
             referencedColumns: ["id"]
           },
           {
@@ -163,7 +228,7 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      message_type: "text" | "ad_action"
     }
     CompositeTypes: {
       [_ in never]: never
