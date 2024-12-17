@@ -9,7 +9,152 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      [_ in never]: never
+      ads: {
+        Row: {
+          ad_objective: string
+          ad_placement: string
+          call_to_action: string | null
+          campaign_type: string
+          caption: string
+          created_at: string
+          deal_text: string | null
+          description: string
+          discount_amount: number | null
+          external_id: string
+          id: string
+          image_url: string
+          original_price: number
+          product_name: string
+          target_audience: string[]
+          updated_at: string
+          user_id: string
+          variants: string[]
+        }
+        Insert: {
+          ad_objective: string
+          ad_placement: string
+          call_to_action?: string | null
+          campaign_type: string
+          caption: string
+          created_at?: string
+          deal_text?: string | null
+          description: string
+          discount_amount?: number | null
+          external_id: string
+          id?: string
+          image_url: string
+          original_price: number
+          product_name: string
+          target_audience?: string[]
+          updated_at?: string
+          user_id: string
+          variants?: string[]
+        }
+        Update: {
+          ad_objective?: string
+          ad_placement?: string
+          call_to_action?: string | null
+          campaign_type?: string
+          caption?: string
+          created_at?: string
+          deal_text?: string | null
+          description?: string
+          discount_amount?: number | null
+          external_id?: string
+          id?: string
+          image_url?: string
+          original_price?: number
+          product_name?: string
+          target_audience?: string[]
+          updated_at?: string
+          user_id?: string
+          variants?: string[]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ads_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      messages: {
+        Row: {
+          content: string
+          created_at: string
+          id: string
+          receiver_id: string
+          sender_id: string
+          updated_at: string
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          id?: string
+          receiver_id: string
+          sender_id: string
+          updated_at?: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          id?: string
+          receiver_id?: string
+          sender_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "messages_receiver_id_fkey"
+            columns: ["receiver_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "messages_sender_id_fkey"
+            columns: ["sender_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      users: {
+        Row: {
+          avatar_url: string | null
+          created_at: string
+          full_name: string
+          id: string
+          instagram_handle: string | null
+          updated_at: string
+          username: string
+          website_url: string | null
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string
+          full_name: string
+          id?: string
+          instagram_handle?: string | null
+          updated_at?: string
+          username: string
+          website_url?: string | null
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string
+          full_name?: string
+          id?: string
+          instagram_handle?: string | null
+          updated_at?: string
+          username?: string
+          website_url?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
