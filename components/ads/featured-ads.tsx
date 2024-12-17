@@ -35,7 +35,7 @@ export function FeaturedAds({ ads }: FeaturedAdsProps) {
           {ads.map((ad) => (
             <CarouselItem key={ad.id}>
               <div className="p-1">
-                <AdPresentation ad={ad} user={ad.user} />
+                <AdPresentation ad={ad} showFeedActions />
                 <div className="mt-4 flex justify-center">
                   <Link
                     href={`/chat/${ad.user_id}`}
@@ -54,8 +54,8 @@ export function FeaturedAds({ ads }: FeaturedAdsProps) {
             </CarouselItem>
           ))}
         </CarouselContent>
-        <CarouselPrevious className="left-2" />
-        <CarouselNext className="right-2" />
+        <CarouselPrevious className="top-[35%] left-2" />
+        <CarouselNext className="top-[35%] right-2" />
       </Carousel>
     </div>
   );
