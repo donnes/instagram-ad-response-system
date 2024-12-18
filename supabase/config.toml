@@ -1,4 +1,4 @@
-project_id = "ebbihlnrttvyinhexrap"
+project_id = "lxpqrfsdfgnbndpekoaj"
 
 [api]
 enabled = true
@@ -19,12 +19,3 @@ enabled = true
 
 [studio]
 port = 54323
-
-[auth.email]
-enable_signup = false
-
-[analytics]
-enabled = true
-port = 54327
-vector_port = 54328
-backend = "postgres"

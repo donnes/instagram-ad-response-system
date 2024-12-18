@@ -5,38 +5,43 @@ insert into users (
   full_name,
   avatar_url,
   website_url,
-  instagram_handle
+  instagram_handle,
+  is_business
 ) values (
   'e12e6f9d-8f8e-4f9c-b9e2-8f8e4f9cb9e2',
   'donnes',
   'Donald Silveira',
   'https://avatar.vercel.sh/donnes.svg?text=DS',
   NULL,
-  '@donnes'
+  '@donnes',
+  false
 ),
 (
   '2d81d8d7-6c6b-4c7b-9cb9-5b8f1d5f5e9a',
   'dailygem',
   'Daily Gem',
   'https://avatar.vercel.sh/dailygem.svg?text=GEM',
-  'https://dailygem.com'
-  '@dailygem'
+  'https://dailygem.com',
+  '@dailygem',
+  true
 ),
 (
   '3f92d8e8-7d7c-5d8c-ada0-6c9f2e6f6f0b',
   'trycreate',
   'Create',
-  'https://avatar.vercel.sh/dailygem.svg?text=C',
-  'https://trycreate.co'
-  '@trycreate'
+  'https://avatar.vercel.sh/trycreate.svg?text=CREATE',
+  'https://trycreate.co',
+  '@trycreate',
+  true
 ),
 (
   '4fa3e9f9-8e8d-6e9d-beb1-7d0f3f7f7f1c',
   'safiyaa',
   'Safiyaa',
-  'https://avatar.vercel.sh/dailygem.svg?text=S',
-  'https://www.safiyaa.com'
-  '@safiyaa'
+  'https://avatar.vercel.sh/safiyaa.svg?text=SAFIYAA',
+  'https://www.safiyaa.com',
+  '@safiyaa',
+  true
 );
 
 -- Seed ads data
@@ -91,9 +96,9 @@ insert into ads (
 (
   '4fa3e9f9-8e8d-6e9d-beb1-7d0f3f7f7f1c', -- Safiyaa user_id
   'ad_003',
-  'https://www.safiyaa.com/cdn/shop/files/RS25_DL1085.1_MS-BLACK_ECOM_fr_2500x2500_square.jpg?v=1730197568&width=823',
+  'https://www.safiyaa.com/cdn/shop/files/RS25_DL1045.1_HC-BLACK_CRS-BLACK_ECOM_fr.jpg?v=1734511049&width=600',
   'Elegance redefined ✨. Discover the timeless Safiyaa dress collection for your special moments.',
-  'reply for 15% off on your first order',
+  'Reply for 15% off on your first order',
   'Safiyaa Signature Dress',
   1200.00,
   10.00,

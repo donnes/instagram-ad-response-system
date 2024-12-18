@@ -1,7 +1,7 @@
 -- Create ads table
 create table ads (
   id uuid primary key default uuid_generate_v4(),
-  brand_id uuid not null references brands(id) on delete cascade,
+  user_id uuid not null references users(id) on delete cascade,
   external_id text unique not null,
   created_at timestamp with time zone default timezone('utc'::text, now()) not null,
   updated_at timestamp with time zone default timezone('utc'::text, now()) not null,
@@ -9,7 +9,6 @@ create table ads (
   -- Ad content
   image_url text not null,
   caption text not null,
-  call_to_action text,
   deal_text text,
 
   -- Product details
@@ -27,7 +26,7 @@ create table ads (
 );
 
 -- Create indexes
-create index ads_brand_id_idx on ads(brand_id);
+create index ads_user_id_idx on ads(user_id);
 create index ads_external_id_idx on ads(external_id);
 
 -- Create trigger to automatically update updated_at
