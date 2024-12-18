@@ -3,7 +3,7 @@ import 'server-only';
 import { unstable_cache } from 'next/cache';
 import { cache } from 'react';
 import { createClient } from '../client/server';
-import { getAdsQuery, getMessagesQuery, getUserQuery } from './queries';
+import { getAdsQuery, getUserQuery } from './queries';
 
 export const getSession = cache(async () => {
   // TODO: Implement supabase session
@@ -33,7 +33,8 @@ export const getUser = async () => {
     return null;
   }
 
-  const supabase = await createClient();
+  // TODO: Remove admin flag once we have a proper auth flow
+  const supabase = await createClient({ admin: true });
 
   return unstable_cache(
     async () => {
@@ -48,7 +49,8 @@ export const getUser = async () => {
 };
 
 export const getAds = async () => {
-  const supabase = await createClient();
+  // TODO: Remove admin flag once we have a proper auth flow
+  const supabase = await createClient({ admin: true });
 
   return unstable_cache(
     async () => {
@@ -57,30 +59,6 @@ export const getAds = async () => {
     ['ads'],
     {
       tags: ['ads'],
-      revalidate: 180,
-    },
-  )();
-};
-
-export const getMessages = async (receiverId: string) => {
-  const {
-    data: { session },
-  } = await getSession();
-  const userId = session?.user?.id;
-
-  if (!userId) {
-    return Promise.resolve([]);
-  }
-
-  const supabase = await createClient();
-
-  return unstable_cache(
-    async () => {
-      return getMessagesQuery(supabase, userId, receiverId);
-    },
-    ['messages', userId, receiverId],
-    {
-      tags: [`messages_${userId}_${receiverId}`],
       revalidate: 180,
     },
   )();

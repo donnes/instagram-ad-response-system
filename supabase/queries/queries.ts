@@ -14,24 +14,12 @@ export async function getAdsQuery(supabase: Client) {
     .from('ads')
     .select(`
       *,
-      user:user_id (*)
+      user:user_id (
+        id,
+        username,
+        full_name,
+        avatar_url
+      )
     `)
-    .throwOnError();
-}
-
-export async function getMessagesQuery(
-  supabase: Client,
-  senderId: string,
-  receiverId: string,
-) {
-  return supabase
-    .from('messages')
-    .select(`
-      *,
-      sender:sender_id (*),
-      receiver:receiver_id (*)
-    `)
-    .eq('sender_id', senderId)
-    .eq('receiver_id', receiverId)
     .throwOnError();
 }
