@@ -43,13 +43,14 @@ export function FeaturedAds({ ads }: FeaturedAdsProps) {
                     onClick={() => handleStartConversation(ad)}
                     className="rounded-full"
                     size="lg"
+                    disabled={isPending}
                   >
                     {isPending ? (
                       <Loader2 className="animate-spin" />
                     ) : (
                       <MessageCircle />
                     )}
-                    {!isPending && <span className="font-medium">Message</span>}
+                    <span className="font-medium">Message</span>
                   </Button>
                 </div>
               </div>
