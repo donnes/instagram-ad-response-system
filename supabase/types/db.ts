@@ -13,7 +13,6 @@ export type Database = {
         Row: {
           ad_objective: string
           ad_placement: string
-          call_to_action: string | null
           campaign_type: string
           caption: string
           created_at: string
@@ -33,7 +32,6 @@ export type Database = {
         Insert: {
           ad_objective: string
           ad_placement: string
-          call_to_action?: string | null
           campaign_type: string
           caption: string
           created_at?: string
@@ -53,7 +51,6 @@ export type Database = {
         Update: {
           ad_objective?: string
           ad_placement?: string
-          call_to_action?: string | null
           campaign_type?: string
           caption?: string
           created_at?: string
@@ -115,62 +112,58 @@ export type Database = {
       }
       conversations: {
         Row: {
-          ad_id: string | null
           created_at: string | null
           id: string
           last_message_at: string | null
         }
         Insert: {
-          ad_id?: string | null
           created_at?: string | null
           id?: string
           last_message_at?: string | null
         }
         Update: {
-          ad_id?: string | null
           created_at?: string | null
           id?: string
           last_message_at?: string | null
         }
+        Relationships: []
+      }
+      messages: {
+        Row: {
+          ad_id: string | null
+          content: string
+          conversation_id: string
+          created_at: string | null
+          id: string
+          sender_id: string
+          type: Database["public"]["Enums"]["message_type"]
+        }
+        Insert: {
+          ad_id?: string | null
+          content: string
+          conversation_id: string
+          created_at?: string | null
+          id?: string
+          sender_id: string
+          type?: Database["public"]["Enums"]["message_type"]
+        }
+        Update: {
+          ad_id?: string | null
+          content?: string
+          conversation_id?: string
+          created_at?: string | null
+          id?: string
+          sender_id?: string
+          type?: Database["public"]["Enums"]["message_type"]
+        }
         Relationships: [
           {
-            foreignKeyName: "conversations_ad_id_fkey"
+            foreignKeyName: "messages_ad_id_fkey"
             columns: ["ad_id"]
             isOneToOne: false
             referencedRelation: "ads"
             referencedColumns: ["id"]
           },
-        ]
-      }
-      messages: {
-        Row: {
-          content: string
-          conversation_id: string | null
-          created_at: string
-          id: string
-          sender_id: string
-          type: Database["public"]["Enums"]["message_type"]
-          updated_at: string
-        }
-        Insert: {
-          content: string
-          conversation_id?: string | null
-          created_at?: string
-          id?: string
-          sender_id: string
-          type?: Database["public"]["Enums"]["message_type"]
-          updated_at?: string
-        }
-        Update: {
-          content?: string
-          conversation_id?: string | null
-          created_at?: string
-          id?: string
-          sender_id?: string
-          type?: Database["public"]["Enums"]["message_type"]
-          updated_at?: string
-        }
-        Relationships: [
           {
             foreignKeyName: "messages_conversation_id_fkey"
             columns: ["conversation_id"]
@@ -187,6 +180,42 @@ export type Database = {
           },
         ]
       }
+      typing_status: {
+        Row: {
+          conversation_id: string
+          is_typing: boolean
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          conversation_id: string
+          is_typing?: boolean
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          conversation_id?: string
+          is_typing?: boolean
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "typing_status_conversation_id_fkey"
+            columns: ["conversation_id"]
+            isOneToOne: false
+            referencedRelation: "conversations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "typing_status_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       users: {
         Row: {
           avatar_url: string | null
@@ -194,6 +223,7 @@ export type Database = {
           full_name: string
           id: string
           instagram_handle: string | null
+          is_business: boolean | null
           updated_at: string
           username: string
           website_url: string | null
@@ -204,6 +234,7 @@ export type Database = {
           full_name: string
           id?: string
           instagram_handle?: string | null
+          is_business?: boolean | null
           updated_at?: string
           username: string
           website_url?: string | null
@@ -214,6 +245,7 @@ export type Database = {
           full_name?: string
           id?: string
           instagram_handle?: string | null
+          is_business?: boolean | null
           updated_at?: string
           username?: string
           website_url?: string | null
