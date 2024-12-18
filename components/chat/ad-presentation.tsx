@@ -2,8 +2,11 @@ import type { Database } from '@/supabase/types/db';
 import { Bookmark, Heart } from 'lucide-react';
 import Image from 'next/image';
 
-type Ad = Database['public']['Tables']['ads']['Row'] & {
-  user: Database['public']['Tables']['users']['Row'];
+export type Ad = Database['public']['Tables']['ads']['Row'] & {
+  user: Pick<
+    Database['public']['Tables']['users']['Row'],
+    'id' | 'username' | 'full_name' | 'avatar_url'
+  >;
 };
 
 interface AdPresentationProps {
