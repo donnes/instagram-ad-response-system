@@ -1,7 +1,7 @@
 'use client';
 
 import { startConversationAction } from '@/actions/start-conversation-action';
-import { type Ad, AdPresentation } from '@/components/chat/ad-presentation';
+import { type Ad, AdCard } from '@/components/ads/ad-card';
 import { Button } from '@/components/ui/button';
 import {
   Carousel,
@@ -13,15 +13,15 @@ import {
 import { Loader2, MessageCircle } from 'lucide-react';
 import { useAction } from 'next-safe-action/hooks';
 
-interface FeaturedAdsProps {
+interface Props {
   ads: Ad[];
 }
 
-export function FeaturedAds({ ads }: FeaturedAdsProps) {
+export function AdsFeed({ ads }: Props) {
   const { execute, isPending } = useAction(startConversationAction);
 
   function handleStartConversation(ad: Ad) {
-    execute({ otherUserId: ad.user_id });
+    execute({ otherUserId: ad.user_id, adId: ad.id });
   }
 
   return (
@@ -37,7 +37,7 @@ export function FeaturedAds({ ads }: FeaturedAdsProps) {
           {ads.map((ad) => (
             <CarouselItem key={ad.id}>
               <div className="p-1">
-                <AdPresentation ad={ad} showFeedActions />
+                <AdCard ad={ad} />
                 <div className="mt-4 flex justify-center">
                   <Button
                     onClick={() => handleStartConversation(ad)}

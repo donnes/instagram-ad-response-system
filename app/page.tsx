@@ -1,4 +1,4 @@
-import { FeaturedAds } from '@/components/ads/featured-ads';
+import { AdsFeed } from '@/components/feed/ads-feed';
 import { getAds } from '@/supabase/queries';
 
 export default async function HomePage() {
@@ -7,12 +7,10 @@ export default async function HomePage() {
   return (
     <main className="flex min-h-dvh flex-col bg-background">
       <header className="flex h-14 items-center justify-center border-b border-border px-4">
-        <h1 className="text-lg font-semibold text-foreground">
-          Featured Offers
-        </h1>
+        <h1 className="text-lg font-semibold text-foreground">Feed</h1>
       </header>
 
-      <FeaturedAds ads={data ?? []} />
+      <AdsFeed ads={data ?? []} />
     </main>
   );
 }
