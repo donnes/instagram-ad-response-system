@@ -7,16 +7,18 @@ import { startConversationSchema } from './schema';
 
 export const startConversationAction = authActionClient
   .schema(startConversationSchema)
-  .action(async ({ parsedInput: { otherUserId }, ctx: { supabase, user } }) => {
-    const { data, error } = await startConversationMutation(
-      supabase,
-      user.id,
-      otherUserId,
-    );
+  .action(
+    async ({ parsedInput: { otherUserId, adId }, ctx: { supabase, user } }) => {
+      const { data, error } = await startConversationMutation(
+        supabase,
+        user.id,
+        otherUserId,
+      );
 
-    if (error) {
-      throw new Error(error.message);
-    }
+      if (error) {
+        throw new Error(error.message);
+      }
 
-    redirect(`/direct/${data.id}`, RedirectType.push);
-  });
+      redirect(`/direct/${data.id}?ad_id=${adId}`, RedirectType.push);
+    },
+  );
