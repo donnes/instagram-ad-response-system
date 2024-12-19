@@ -5,19 +5,21 @@ export async function startConversationMutation(
   userId: string,
   otherUserId: string,
 ) {
-  // First, try to find an existing conversation between the users
-  const existingConversation = await supabase
-    .from('conversations')
+  // Find conversations where both users are participants
+  const { data: existingConversations } = await supabase
+    .from('conversation_participants')
     .select(`
       *,
-      participants:conversation_participants!inner(user_id)
+      conversation:conversation_id(*)
     `)
-    .eq('conversation_participants.user_id', userId)
-    .eq('conversation_participants.user_id', otherUserId)
-    .single();
+    .or(`user_id.eq.${userId},user_id.eq.${otherUserId}`);
 
-  if (existingConversation.data) {
-    return existingConversation;
+  // If we found a conversation where both users are participants, return the first one
+  if (existingConversations?.length === 2) {
+    return {
+      data: existingConversations[0].conversation,
+      error: null,
+    };
   }
 
   // If no conversation exists, create a new one
