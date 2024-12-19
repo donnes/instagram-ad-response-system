@@ -58,3 +58,19 @@ export async function getConversationQuery(
     .neq('conversation_participants.user_id', currentUserId)
     .single();
 }
+
+export async function getMessagesQuery(
+  supabase: Client,
+  conversationId: string,
+) {
+  return supabase
+    .from('messages')
+    .select(`
+      *,
+      sender:sender_id(*),
+      ad:ad_id(*)
+    `)
+    .eq('conversation_id', conversationId)
+    .order('created_at', { ascending: true })
+    .limit(50);
+}

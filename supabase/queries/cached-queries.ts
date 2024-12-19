@@ -7,6 +7,7 @@ import {
   getAdQuery,
   getAdsQuery,
   getConversationQuery,
+  getMessagesQuery,
   getUserQuery,
 } from './queries';
 
@@ -103,6 +104,22 @@ export const getConversation = async (conversationId: string) => {
     {
       tags: [`conversation_${conversationId}`],
       revalidate: 3600,
+    },
+  )();
+};
+
+export const getMessages = async (conversationId: string) => {
+  // TODO: Remove admin flag once we have a proper auth flow
+  const supabase = await createClient({ admin: true });
+
+  return unstable_cache(
+    async () => {
+      return getMessagesQuery(supabase, conversationId);
+    },
+    ['messages', conversationId],
+    {
+      tags: [`messages_${conversationId}`],
+      revalidate: 60,
     },
   )();
 };
