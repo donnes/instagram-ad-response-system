@@ -1,7 +1,6 @@
 'use client';
 
 import { startConversationAction } from '@/actions/start-conversation-action';
-import { type Ad, AdCard } from '@/components/ads/ad-card';
 import { Button } from '@/components/ui/button';
 import {
   Carousel,
@@ -12,6 +11,7 @@ import {
 } from '@/components/ui/carousel';
 import { Loader2, MessageCircle } from 'lucide-react';
 import { useAction } from 'next-safe-action/hooks';
+import { type Ad, AdCard } from './ad-card';
 
 interface Props {
   ads: Ad[];
