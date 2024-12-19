@@ -1,6 +1,6 @@
+import { Separator } from '@/components/ui/separator';
 import type { Database } from '@/supabase/types/db';
 import Image from 'next/image';
-import { Separator } from '../ui/separator';
 
 export type Ad = Database['public']['Tables']['ads']['Row'];
 
