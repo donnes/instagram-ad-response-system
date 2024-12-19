@@ -1,5 +1,6 @@
+import { AdCard } from '@/components/chat/ad-card';
 import { ChatWindow } from '@/components/chat/chat-window';
-import { getConversation } from '@/supabase/queries';
+import { getAd, getConversation } from '@/supabase/queries';
 import { ArrowLeft, Info, Send } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -9,16 +10,22 @@ interface Props {
   params: Promise<{
     id: string;
   }>;
+  searchParams: Promise<{
+    ad_id?: string;
+  }>;
 }
 
-export default async function DirectPage({ params }: Props) {
+export default async function DirectPage({ params, searchParams }: Props) {
   const { id } = await params;
+  const { ad_id } = await searchParams;
 
   const { data: conversation } = await getConversation(id);
 
   if (!conversation) {
     return notFound();
   }
+
+  const ad = ad_id ? await getAd(ad_id) : null;
 
   const participant = conversation?.participants[0].user;
 
@@ -61,10 +68,9 @@ export default async function DirectPage({ params }: Props) {
         </div>
       </header>
 
-      <div className="flex-1 overflow-y-auto px-3">
-        <div className="mx-auto max-w-2xl py-4">
-          <div className="mb-6">{/* <AdPresentation ad={} user={} /> */}</div>
-
+      <div className="flex-1 px-3">
+        {ad?.data && <AdCard ad={ad.data} />}
+        <div className="overflow-y-auto py-4">
           <ChatWindow />
         </div>
       </div>
