@@ -1,7 +1,13 @@
 import { AdCard } from '@/components/chat/ad-card';
+import { ChatInput } from '@/components/chat/chat-input';
 import { ChatWindow } from '@/components/chat/chat-window';
-import { getAd, getConversation } from '@/supabase/queries';
-import { ArrowLeft, Info, Send } from 'lucide-react';
+import {
+  getAd,
+  getConversation,
+  getMessages,
+  getUser,
+} from '@/supabase/queries';
+import { ArrowLeft, Info } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
@@ -19,15 +25,16 @@ export default async function DirectPage({ params, searchParams }: Props) {
   const { id } = await params;
   const { ad_id } = await searchParams;
 
-  const { data: conversation } = await getConversation(id);
+  const currentUser = await getUser();
+  const conversation = await getConversation(id);
+  const messages = await getMessages(id);
+  const ad = ad_id ? await getAd(ad_id) : null;
 
-  if (!conversation) {
+  if (!conversation.data || !currentUser?.data) {
     return notFound();
   }
 
-  const ad = ad_id ? await getAd(ad_id) : null;
-
-  const participant = conversation?.participants[0].user;
+  const user = conversation.data.participants[0].user;
 
   return (
     <main className="flex h-dvh flex-col bg-background">
@@ -42,18 +49,15 @@ export default async function DirectPage({ params, searchParams }: Props) {
           <div className="flex items-center gap-3">
             <div className="relative h-8 w-8">
               <Image
-                src={
-                  participant?.avatar_url ??
-                  'https://avatar.vercel.sh/placeholder'
-                }
-                alt={participant?.full_name ?? ''}
+                src={user.avatar_url ?? 'https://avatar.vercel.sh/placeholder'}
+                alt={user.full_name}
                 className="rounded-full object-cover"
                 fill
               />
             </div>
             <div>
               <span className="font-semibold text-foreground">
-                {participant?.full_name}
+                {user.full_name}
               </span>
             </div>
           </div>
@@ -71,27 +75,15 @@ export default async function DirectPage({ params, searchParams }: Props) {
       <div className="flex-1 px-3">
         {ad?.data && <AdCard ad={ad.data} />}
         <div className="overflow-y-auto py-4">
-          <ChatWindow />
+          <ChatWindow
+            messages={messages.data ?? []}
+            currentUser={currentUser.data}
+            conversationId={id}
+          />
         </div>
       </div>
 
-      <div className="border-t border-border px-4 py-2">
-        <div className="flex items-center gap-3">
-          <div className="flex-1">
-            <input
-              type="text"
-              placeholder="Message..."
-              className="w-full rounded-full bg-muted px-4 py-2 text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
-            />
-          </div>
-          <button
-            type="button"
-            className="text-foreground hover:text-muted-foreground"
-          >
-            <Send className="size-6" />
-          </button>
-        </div>
-      </div>
+      <ChatInput conversationId={id} adId={ad_id} />
     </main>
   );
 }
