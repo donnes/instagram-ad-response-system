@@ -10,6 +10,18 @@ export async function getUserQuery(supabase: Client, userId: string) {
 }
 
 export async function getAdsQuery(supabase: Client) {
+  return supabase.from('ads').select(`
+      *,
+      user:user_id (
+        id,
+        username,
+        full_name,
+        avatar_url
+      )
+    `);
+}
+
+export async function getAdQuery(supabase: Client, adId: string) {
   return supabase
     .from('ads')
     .select(`
@@ -21,7 +33,8 @@ export async function getAdsQuery(supabase: Client) {
         avatar_url
       )
     `)
-    .throwOnError();
+    .eq('id', adId)
+    .single();
 }
 
 export async function getConversationQuery(

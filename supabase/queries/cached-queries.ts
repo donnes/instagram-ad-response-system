@@ -3,7 +3,12 @@ import 'server-only';
 import { unstable_cache } from 'next/cache';
 import { cache } from 'react';
 import { createClient } from '../client/server';
-import { getAdsQuery, getConversationQuery, getUserQuery } from './queries';
+import {
+  getAdQuery,
+  getAdsQuery,
+  getConversationQuery,
+  getUserQuery,
+} from './queries';
 
 export const getSession = cache(async () => {
   // TODO: Implement supabase session
@@ -64,6 +69,22 @@ export const getAds = async () => {
   )();
 };
 
+export const getAd = async (adId: string) => {
+  // TODO: Remove admin flag once we have a proper auth flow
+  const supabase = await createClient({ admin: true });
+
+  return unstable_cache(
+    async () => {
+      return getAdQuery(supabase, adId);
+    },
+    ['ad', adId],
+    {
+      tags: [`ad_${adId}`],
+      revalidate: 3600,
+    },
+  )();
+};
+
 export const getConversation = async (conversationId: string) => {
   // TODO: Remove admin flag once we have a proper auth flow
   const supabase = await createClient({ admin: true });
@@ -81,7 +102,7 @@ export const getConversation = async (conversationId: string) => {
     ['conversation', conversationId, userId],
     {
       tags: [`conversation_${conversationId}`],
-      revalidate: 180,
+      revalidate: 3600,
     },
   )();
 };
