@@ -66,3 +66,22 @@ export async function sendMessageMutation(
     })
     .throwOnError();
 }
+
+export async function updateTypingStatusMutation(
+  supabase: Client,
+  conversationId: string,
+  userId: string,
+  isTyping: boolean,
+) {
+  await supabase
+    .from('typing_status')
+    .upsert(
+      {
+        conversation_id: conversationId,
+        user_id: userId,
+        is_typing: isTyping,
+      },
+      { onConflict: 'conversation_id,user_id' },
+    )
+    .throwOnError();
+}

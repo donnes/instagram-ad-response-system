@@ -11,3 +11,8 @@ export const sendMessageSchema = z.object({
   type: z.enum(['text', 'ad_action']).default('text'),
   adId: z.string().uuid().optional(),
 });
+
+export const updateTypingStatusSchema = z.object({
+  conversationId: z.string().uuid(),
+  isTyping: z.boolean(),
+});
