@@ -38,7 +38,7 @@ export default async function DirectPage({ params, searchParams }: Props) {
 
   return (
     <main className="flex h-dvh flex-col bg-background">
-      <header className="flex h-14 items-center justify-between border-b border-border px-4">
+      <header className="sticky top-0 flex h-14 items-center justify-between border-b border-border px-4">
         <div className="flex items-center gap-3">
           <Link
             href="/"
