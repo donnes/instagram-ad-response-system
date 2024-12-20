@@ -1,7 +1,6 @@
 'use server';
 
 import { sendMessageMutation } from '@/supabase/mutations';
-import { revalidateTag } from 'next/cache';
 import { authActionClient } from './safe-action';
 import { sendMessageSchema } from './schema';
 
@@ -20,8 +19,6 @@ export const sendMessageAction = authActionClient
         type,
         adId,
       );
-
-      revalidateTag(`messages_${conversationId}`);
 
       return { success: true };
     },
