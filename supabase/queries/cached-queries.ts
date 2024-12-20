@@ -112,14 +112,5 @@ export const getMessages = async (conversationId: string) => {
   // TODO: Remove admin flag once we have a proper auth flow
   const supabase = await createClient({ admin: true });
 
-  return unstable_cache(
-    async () => {
-      return getMessagesQuery(supabase, conversationId);
-    },
-    ['messages', conversationId],
-    {
-      tags: [`messages_${conversationId}`],
-      revalidate: 60,
-    },
-  )();
+  return getMessagesQuery(supabase, conversationId);
 };

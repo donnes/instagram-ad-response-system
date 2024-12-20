@@ -10,29 +10,13 @@ export async function getUserQuery(supabase: Client, userId: string) {
 }
 
 export async function getAdsQuery(supabase: Client) {
-  return supabase.from('ads').select(`
-      *,
-      user:user_id (
-        id,
-        username,
-        full_name,
-        avatar_url
-      )
-    `);
+  return supabase.from('ads').select('*, user:user_id(*)');
 }
 
 export async function getAdQuery(supabase: Client, adId: string) {
   return supabase
     .from('ads')
-    .select(`
-      *,
-      user:user_id (
-        id,
-        username,
-        full_name,
-        avatar_url
-      )
-    `)
+    .select('*, user:user_id(*)')
     .eq('id', adId)
     .single();
 }
@@ -44,16 +28,7 @@ export async function getConversationQuery(
 ) {
   return supabase
     .from('conversations')
-    .select(`
-      *,
-      participants:conversation_participants!inner(
-        user:user_id (
-          id,
-          full_name,
-          avatar_url
-        )
-      )
-    `)
+    .select('*, participants:conversation_participants!inner(user:user_id(*))')
     .eq('id', conversationId)
     .neq('conversation_participants.user_id', currentUserId)
     .single();
@@ -65,11 +40,7 @@ export async function getMessagesQuery(
 ) {
   return supabase
     .from('messages')
-    .select(`
-      *,
-      sender:sender_id(*),
-      ad:ad_id(*)
-    `)
+    .select('*, sender:sender_id(*), ad:ad_id(*)')
     .eq('conversation_id', conversationId)
     .order('created_at', { ascending: true })
     .limit(50);
