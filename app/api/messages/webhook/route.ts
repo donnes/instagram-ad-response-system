@@ -1,9 +1,10 @@
 import { model } from '@/ai';
 import {
-  FIRST_MESSAGE_PROMPT,
+  ACKNOWLEDGMENT_MESSAGE_PROMPT,
+  DEAL_MESSAGE_PROMPT,
   generateSystemPrompt,
-  SECOND_MESSAGE_PROMPT,
 } from '@/ai/prompts';
+import { env } from '@/env';
 import { createClient } from '@/supabase/client/server';
 import { sendMessageMutation } from '@/supabase/mutations';
 import { getAdQuery, getUserQuery } from '@/supabase/queries/queries';
@@ -12,7 +13,7 @@ import { generateText } from 'ai';
 import { headers } from 'next/headers';
 import { NextResponse } from 'next/server';
 
-const WEBHOOK_SECRET = process.env.SUPABASE_WEBHOOK_SECRET;
+const WEBHOOK_SECRET = env.SUPABASE_WEBHOOK_SECRET;
 
 type InsertPayload = {
   type: 'INSERT';
@@ -22,11 +23,13 @@ type InsertPayload = {
   old_record: null;
 };
 
+const aiModel = model('claude-3-5-sonnet-20240620');
+
 export async function POST(request: Request) {
   // Verify webhook secret
   const signature = (await headers()).get('x-webhook-secret');
   if (signature !== WEBHOOK_SECRET) {
-    return new NextResponse('Unauthorized', { status: 401 });
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
   const payload = (await request.json()) as InsertPayload;
@@ -34,7 +37,7 @@ export async function POST(request: Request) {
 
   // Only process customer messages (not AI responses)
   if (!message || message.type === 'ad_action') {
-    return new NextResponse('OK');
+    return NextResponse.json({ message: 'OK' });
   }
 
   try {
@@ -44,7 +47,7 @@ export async function POST(request: Request) {
 
     // If the user is a business, we don't need to process the message
     if (user.data?.is_business) {
-      return new NextResponse('OK');
+      return NextResponse.json({ message: 'OK' });
     }
 
     // Get the ad details if this is a conversation about an ad
@@ -61,38 +64,41 @@ export async function POST(request: Request) {
         };
 
         const { text: acknowledgmentMessage } = await generateText({
-          model: model('claude-3-sonnet'),
+          model: aiModel,
           system: generateSystemPrompt(adContext),
-          prompt: FIRST_MESSAGE_PROMPT,
+          prompt: ACKNOWLEDGMENT_MESSAGE_PROMPT,
         });
 
         await sendMessageMutation(
           supabase,
           message.conversation_id,
           ad.user_id, // Send as the brand owner
-          acknowledgmentMessage.replace(/^"(.*)"$/, '$1'), // Remove quotes if present
+          acknowledgmentMessage,
           'text',
         );
 
         const { text: dealMessage } = await generateText({
-          model: model('claude-3-sonnet'),
+          model: aiModel,
           system: generateSystemPrompt(adContext),
-          prompt: SECOND_MESSAGE_PROMPT,
+          prompt: DEAL_MESSAGE_PROMPT,
         });
 
         await sendMessageMutation(
           supabase,
           message.conversation_id,
           ad.user_id, // Send as the brand owner
-          dealMessage.replace(/^"(.*)"$/, '$1'), // Remove quotes if present
+          dealMessage,
           'ad_action',
         );
       }
     }
 
-    return new NextResponse('OK');
+    return NextResponse.json({ message: 'OK' });
   } catch (error) {
     console.error('Webhook error:', error);
-    return new NextResponse('Internal Server Error', { status: 500 });
+    return NextResponse.json(
+      { error: 'Internal Server Error' },
+      { status: 500 },
+    );
   }
 }
