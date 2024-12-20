@@ -6,7 +6,10 @@ import {
 } from '@/ai/prompts';
 import { env } from '@/env';
 import { createClient } from '@/supabase/client/server';
-import { sendMessageMutation } from '@/supabase/mutations';
+import {
+  sendMessageMutation,
+  updateTypingStatusMutation,
+} from '@/supabase/mutations';
 import { getAdQuery, getUserQuery } from '@/supabase/queries/queries';
 import type { Database } from '@/supabase/types';
 import { generateText } from 'ai';
@@ -69,6 +72,13 @@ export async function POST(request: Request) {
           prompt: ACKNOWLEDGMENT_MESSAGE_PROMPT,
         });
 
+        await updateTypingStatusMutation(
+          supabase,
+          message.conversation_id,
+          ad.user_id,
+          true,
+        );
+
         await sendMessageMutation(
           supabase,
           message.conversation_id,
@@ -89,6 +99,13 @@ export async function POST(request: Request) {
           ad.user_id, // Send as the brand owner
           dealMessage,
           'ad_action',
+        );
+
+        await updateTypingStatusMutation(
+          supabase,
+          message.conversation_id,
+          ad.user_id,
+          false,
         );
       }
     }
