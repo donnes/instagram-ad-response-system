@@ -85,7 +85,7 @@ export default async function DirectPage({ params, searchParams }: Props) {
         </div>
       </div>
 
-      <ChatInput conversationId={id} adId={ad_id} />
+      <ChatInput conversationId={id} otherUser={otherUser} adId={ad_id} />
     </main>
   );
 }
