@@ -8,11 +8,11 @@ import { type Message, ChatMessage } from './chat-message';
 
 interface Props {
   messages: Message[];
-  currentUser: Database['public']['Tables']['users']['Row'];
+  user: Database['public']['Tables']['users']['Row'];
   conversationId: string;
 }
 
-export function ChatWindow({ messages, currentUser, conversationId }: Props) {
+export function ChatWindow({ messages, user, conversationId }: Props) {
   const messagesEndRef = React.useRef<HTMLDivElement>(null);
 
   React.useEffect(() => {
@@ -57,7 +57,7 @@ export function ChatWindow({ messages, currentUser, conversationId }: Props) {
           </div>
 
           {messages.map((message) => {
-            if (message.sender_id === currentUser.id) {
+            if (message.sender_id === user.id) {
               return (
                 <ChatMessage
                   key={message.id}

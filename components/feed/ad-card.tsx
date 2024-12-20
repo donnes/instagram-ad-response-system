@@ -3,10 +3,7 @@ import { Bookmark, Heart } from 'lucide-react';
 import Image from 'next/image';
 
 export type Ad = Database['public']['Tables']['ads']['Row'] & {
-  user: Pick<
-    Database['public']['Tables']['users']['Row'],
-    'id' | 'username' | 'full_name' | 'avatar_url'
-  >;
+  user: Database['public']['Tables']['users']['Row'];
 };
 
 interface Props {

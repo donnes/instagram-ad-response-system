@@ -25,16 +25,16 @@ export default async function DirectPage({ params, searchParams }: Props) {
   const { id } = await params;
   const { ad_id } = await searchParams;
 
-  const currentUser = await getUser();
+  const user = await getUser();
   const conversation = await getConversation(id);
   const messages = await getMessages(id);
   const ad = ad_id ? await getAd(ad_id) : null;
 
-  if (!conversation.data || !currentUser?.data) {
+  if (!conversation.data || !user?.data) {
     return notFound();
   }
 
-  const user = conversation.data.participants[0].user;
+  const otherUser = conversation.data.participants[0].user;
 
   return (
     <main className="flex h-dvh flex-col bg-background">
@@ -49,15 +49,17 @@ export default async function DirectPage({ params, searchParams }: Props) {
           <div className="flex items-center gap-3">
             <div className="relative h-8 w-8">
               <Image
-                src={user.avatar_url ?? 'https://avatar.vercel.sh/placeholder'}
-                alt={user.full_name}
+                src={
+                  otherUser.avatar_url ?? 'https://avatar.vercel.sh/placeholder'
+                }
+                alt={otherUser.full_name}
                 className="rounded-full object-cover"
                 fill
               />
             </div>
             <div>
               <span className="font-semibold text-foreground">
-                {user.full_name}
+                {otherUser.full_name}
               </span>
             </div>
           </div>
@@ -77,7 +79,7 @@ export default async function DirectPage({ params, searchParams }: Props) {
         <div className="overflow-y-auto py-4">
           <ChatWindow
             messages={messages.data ?? []}
-            currentUser={currentUser.data}
+            user={user.data}
             conversationId={id}
           />
         </div>
