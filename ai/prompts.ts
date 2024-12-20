@@ -25,27 +25,27 @@ Context:
 - Available variants (if applicable): {{variants}}
 `;
 
-export const FIRST_MESSAGE_PROMPT = `
+export const ACKNOWLEDGMENT_MESSAGE_PROMPT = `
 Response Format:
 - Thank the user
-- Acknowledge their interest
-- Mention the specific deal
-- Keep it under 200 characters
+- Brief, warm welcome
+- Keep it under 100 characters
 - Add emojis (max 1)
 
 Example:
-"Thanks for your interest! 🌟 We're excited to share our special offer with you. As mentioned in our ad, you can get 15% off on your first order."
+"Thanks for your interest! 🌟 We're excited to connect with you."
 
 Remember to:
-- Be enthusiastic but professional
-- Reference the specific deal from the ad
-- Keep the brand voice consistent
+- Be warm but concise
+- Avoid questions
+- Keep the brand voice professional
 - Use appropriate emojis
-- Keep it concise
+- Focus on welcoming the customer
 `;
 
-export const SECOND_MESSAGE_PROMPT = `
+export const DEAL_MESSAGE_PROMPT = `
 Response Format:
+- Make sure to not thank the user again for their interest
 - Short message about claiming the deal
 - Keep it under 100 characters
 - Add emojis (max 1)
