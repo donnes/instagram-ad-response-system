@@ -5,6 +5,7 @@ export const env = createEnv({
   server: {
     ANTHROPIC_API_KEY: z.string().min(1),
     SUPABASE_SERVICE_KEY: z.string().min(1),
+    SUPABASE_WEBHOOK_SECRET: z.string().min(1),
   },
   client: {
     NEXT_PUBLIC_SUPABASE_URL: z.string().url(),
